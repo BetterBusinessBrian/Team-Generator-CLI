@@ -1,4 +1,5 @@
 # Team-Generator CLI
+![speedgif](https://user-images.githubusercontent.com/69867441/98590718-3b989f80-229d-11eb-8de0-67f1dd490561.gif)
 
 ## Description:
 Quickly build an HTML page from your terminal by entering the details of your team into this CLI. Accepts details for Managers, Engineers, and Interns, requests distinct details for each and creates custom displays for each.
