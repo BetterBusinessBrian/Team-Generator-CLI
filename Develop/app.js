@@ -9,11 +9,141 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
-const inquirer = require('inquirer');
+var employees = [];
 
 
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
+// Start
+console.log("Please build your team.")
+
+// Function to add Manager (run first)
+ async function addManager(){
+let answers = await inquirer.prompt([
+    {
+        type: "input",
+        name: "name",
+        message: "What is your Manager's name?"
+    },
+    {
+        type: 'input',
+        name: "id",
+        message: "What is your Manager's id?"
+    },
+    {
+        type: 'input',
+        name: "email",
+        message: "What is your Manager's email?"
+    },
+    {
+        type: 'input',
+        name: "officeNumber",
+        message: "What is your Manager's office number?"
+    }
+])
+employees.push(new Manager(answers.name, answers.id, answers.email, answers.officeNumber))
+}
+
+// Function to add Engineer
+async function addEngineer(){
+    let answers = await inquirer.prompt([
+        {
+            type: "input",
+            name: "name",
+            message: "What is your Engineer's name?"
+        },
+        {
+            type: 'input',
+            name: "id",
+            message: "What is your Engineer's id?"
+        },
+        {
+            type: 'input',
+            name: "email",
+            message: "What is your Engineer's email?"
+        },
+        {
+            type: 'input',
+            name: "gitHub",
+            message: "What is your Engineers github username?"
+        }
+    ])
+    employees.push(new Engineer(answers.name, answers.id, answers.email, answers.gitHub))
+        addTeamMember();
+    };
+
+// Function to add Intern
+    async function addIntern(){
+        let answers = await inquirer.prompt([
+            {
+                type: "input",
+                name: "name",
+                message: "What is your Interns's name?"
+            },
+            {
+                type: 'input',
+                name: "id",
+                message: "What is your Intern's id?"
+            },
+            {
+                type: 'input',
+                name: "email",
+                message: "What is your Intern's email?"
+            },
+            {
+                type: 'input',
+                name: "school",
+                message: "What is your Intern's school?"
+            }
+        ])
+        employees.push(new Intern(answers.name, answers.id, answers.email, answers.school))
+            addTeamMember();
+        };
+
+ async function addTeamMember(){
+    let answers = await inquirer.prompt([
+        {
+            type: 'list',
+            name: 'toAdd',
+            message:'What type of team member do you want to add?',
+            choices: [
+                'Engineer',
+                'Intern',
+                'I do not want to add any more team members'
+            ]
+        }
+    ])
+        console.log(answers.toAdd);
+        if(answers.toAdd === 'Engineer'){
+             await addEngineer();
+        }
+        if(answers.toAdd === 'Intern'){
+            await addIntern();
+        }
+        if(answers.toAdd === 'I do not want to add any more team members'){
+            await console.log("OK! Enjoy your new roster.")
+            console.log(employees);
+            const teamPage = render(employees);
+            fs.writeFile('../Output/team.html', teamPage, err => {
+                if (err){
+                    throw err
+                }
+            });
+        } else{
+            console.log('error')
+        }
+    }
+
+
+
+async function buildTeam() {
+    await addManager();
+    await addTeamMember();
+}
+
+buildTeam();
+
+
+
+
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
@@ -33,4 +163,4 @@ const inquirer = require('inquirer');
 // and Intern classes should all extend from a class named Employee; see the directions
 // for further information. Be sure to test out each class and verify it generates an
 // object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
+// for the provided `render` function to work! ``
